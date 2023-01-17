@@ -1,8 +1,12 @@
 // Importando Módulos (Dependências)
+const { PORT } = require("dotenv").config().parsed;
 const app = require("express")();
 
 // Mapeando as Rotas
-require("../routes/users")(app);
+const customers = require("../routes/customers");
+app.use("/customers", customers);
+
+// require("../routes/users")(app);
 
 // Iniciando a Aplicação
-app.listen(8080, () => console.log("Servidor rodando na porta 8080..."));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}...`));
