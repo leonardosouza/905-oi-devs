@@ -1,16 +1,9 @@
-const db = require("../infra/connection");
+const Customer = require("../dao/customer");
 
 exports.createOne = (req, res) => {
-  const { id, name, email, birthday, cpf, typeAccount } = req.body;
-
-  const sql = `INSERT INTO customers
-                  (id, name, email, birthday, cpf, typeAccount) 
-                  VALUES 
-                  ('${id}', '${name}', '${email}', '${birthday}', '${cpf}', '${typeAccount}')`;
-
-  db.run(sql, (err) => {
+  Customer.create(req.body, (err) => {
     if (!err) {
-      res.status(201).send({ id, name, email, birthday, cpf, typeAccount });
+      res.status(201).send({});
     } else {
       res.status(400).send({ err });
     }
@@ -18,15 +11,11 @@ exports.createOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  const sql = `SELECT * FROM customers`;
-  db.all(sql, (err, data) => res.send(data));
+  Customer.findAll((err, data) => res.send(data));
 };
 
 exports.getOne = (req, res) => {
-  const { id } = req.params;
-
-  const sql = `SELECT * FROM customers WHERE id = '${id}'`;
-  db.get(sql, (err, data) => {
+  Customer.findOne(req.params.id, (err, data) => {
     if (data) {
       res.status(200).send(data);
     } else {
@@ -35,14 +24,18 @@ exports.getOne = (req, res) => {
   });
 };
 
-exports.changeOne = (req, res) => res.send("CHANGE ONE");
+exports.changeOne = (req, res) => {
+  Customer.updatePartial(req.params.id, req.body, (err) => {
+    if (err) {
+      res.status(400).send({ msg: err });
+    } else {
+      res.status(204).end();
+    }
+  });
+};
 
 exports.removeOne = (req, res) => {
-  const { id } = req.params;
-
-  const sql = `DELETE FROM customers WHERE id = '${id}'`;
-
-  db.run(sql, function (err) {
+  Customer.deleteOne(req.params.id, (err) => {
     if (!err) res.status(204).end();
   });
 };

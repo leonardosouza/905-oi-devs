@@ -3,7 +3,11 @@ const { PORT } = require("dotenv").config().parsed;
 const express = require("express");
 const app = express();
 
-// Middleware
+// Habilitando CORS
+const cors = require("cors");
+app.use(cors());
+
+// Habilitando JSON Parser
 app.use(express.json());
 
 // IMPLEMENTACAO ALTERNATIVA

@@ -11,8 +11,8 @@ router.get("/", customersCtrl.getAll);
 // Recuperar um Cliente Específico
 router.get("/:id", customersCtrl.getOne);
 
-// Atualizar um Cliente
-router.put("/:id", customersCtrl.changeOne);
+// Atualizar um Cliente (Parcial)
+router.patch("/:id", customersCtrl.changeOne);
 
 // Remover um Cliente
 router.delete("/:id", customersCtrl.removeOne);
