@@ -34,7 +34,6 @@ exports.getOne = (req, res) => {
     } else {
       res.status(404).send({ errMsg: "customer not found" });
     }
-    
   });
 };
 
