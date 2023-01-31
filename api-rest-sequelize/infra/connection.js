@@ -1,14 +1,12 @@
 // Conectando com o Banco de Dados
-const path = require("path");
-const { PATH_DB } = require("dotenv").config().parsed;
-const { Database } = require("sqlite3");
-const db = new Database(path.resolve() + PATH_DB);
+const { DIALECT, USER_DB, PASS_DB, HOST_DB, PORT_DB, NAME_DB } = require("dotenv").config().parsed;
+const { Sequelize } = require("sequelize");
 
-module.exports = db;
+const sequelize = new Sequelize(`${DIALECT}://${USER_DB}:${PASS_DB}@${HOST_DB}:${PORT_DB}/${NAME_DB}`);
 
-// ALTERNATIVAS DE IMPLEMENTACAO
-// exports.db = new Database(path.resolve() + PATH_DB);
+sequelize
+    .authenticate()
+    .then(() => console.log(`Conectado ao Postgres!`))
+    .catch(() => console.log(`Falha na conexão ao banco de dados...`))
 
-// module.exports = {
-//   db: new Database(path.resolve() + PATH_DB),
-// };
+module.exports = sequelize;

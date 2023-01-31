@@ -1,27 +1,50 @@
 const Customer = require("../dao/customer");
 
+const CustomerModel = require("../models/customerModel");
+
 exports.createOne = (req, res) => {
-  Customer.create(req.body, (err) => {
-    if (!err) {
-      res.status(201).send({});
-    } else {
-      res.status(400).send({ err });
-    }
-  });
+  // Customer.create(req.body, (err) => {
+  //   if (!err) {
+  //     res.status(201).send({});
+  //   } else {
+  //     res.status(400).send({ err });
+  //   }
+  // });
+
+  const { ulid } = require("ulid");
+  const data = { id: ulid(), ...req.body };
+
+  CustomerModel
+    .create(data)
+    .then(() => res.status(201).json(data))
+    .catch((err) => res.status(500).json({ err }));
 };
 
 exports.getAll = (req, res) => {
-  Customer.findAll((err, data) => res.send(data));
+  // Customer.findAll((err, data) => res.send(data));
+  
+  CustomerModel
+    .findAll()
+    .then((data) => res.status(200).json(data))
+    .catch((err) => res.status(500).json({ err }));
 };
 
+
+
 exports.getOne = (req, res) => {
-  Customer.findOne(req.params.id, (err, data) => {
-    if (data) {
-      res.status(200).send(data);
-    } else {
-      res.status(404).send({ errMsg: "customer not found" });
-    }
-  });
+  // Customer.findOne(req.params.id, (err, data) => {
+  //   if (data) {
+  //     res.status(200).send(data);
+  //   } else {
+  //     res.status(404).send({ errMsg: "customer not found" });
+  //   }
+  // });
+
+  
+  CustomerModel
+    .findOne({ where: { id: req.params.id } })
+    .then((data) => res.status(200).send(data))
+    .catch((err) => res.status(404).send({ errMsg: "customer not found" }))
 };
 
 exports.changeOne = (req, res) => {
